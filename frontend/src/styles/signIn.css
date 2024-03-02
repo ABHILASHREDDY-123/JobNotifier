@@ -1,0 +1,10 @@
+.signIn {
+   display: flex;
+   width: 100%;
+   justify-content: space-between;
+
+}
+.auth-box {
+    margin-top: 0.2%;
+    width: 38%;
+}
