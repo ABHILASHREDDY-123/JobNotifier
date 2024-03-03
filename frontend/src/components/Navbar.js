@@ -48,7 +48,17 @@ const Navbar = ({ token,setToken }) => {
             <div style={{display:"flex",justifyContent:"space-evenly"}}>
               {token && token.length > 0 ? (
                 <>
-
+                  <Typography variant="h6" component="div" sx={{
+                   display: { xs: 'none', md: 'flex' },
+                   mr: 2,
+                   fontFamily: 'monospace',
+                   fontWeight: 700,
+                   color: 'inherit',
+                   textDecoration: 'none',
+                   cursor: "pointer",
+                  }} onClick={()=>navigate("/companies")}>
+                  Companies
+                </Typography>
                  <Typography variant="h6" component="div" sx={{
                    display: { xs: 'none', md: 'flex' },
                    mr: 2,

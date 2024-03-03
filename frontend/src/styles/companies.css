@@ -1,0 +1,25 @@
+.companies {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 1rem;
+    margin-top: 4%;
+    flex-wrap: wrap;
+}
+
+.company {
+    margin-left: 1rem;
+    height: 20rem;
+}
+
+.card-company-name{
+    font-family:cursive;
+}
+
+.card-company{
+    height: 10rem;
+    width: 15rem;
+}
+
+.card-company-available{
+    margin-top: 5%;
+}

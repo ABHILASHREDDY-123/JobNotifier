@@ -13,10 +13,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loader from "./loader";
 import { useNavigate } from "react-router-dom";
 
-const SignIn = ({setToken}) => {
+const SignIn = ({setToken,setUser}) => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    const t = localStorage.getItem("job-notifier");
+    console.log(t);
+    if(t){
+        setToken(t);
+        navigate("/companies")
+    }
     const handleSignUp = async () => {
         try {
             setLoading(true)
@@ -29,7 +34,10 @@ const SignIn = ({setToken}) => {
                     'Content-Type': 'application/json'
                 }
             })
-            setToken(token);
+            console.log(res.data.token)
+            localStorage.setItem("job-notifier",res.data.token);
+            setToken(res.data.token);
+            setUser(res.data.user)
             setLoading(false);
             navigate("/companies")
         }
@@ -50,7 +58,7 @@ const SignIn = ({setToken}) => {
                 <img height={"130%"} width={"auto"} src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8am9iJTIwbm90aWZpZXJ8ZW58MHx8MHx8fDA%3D"></img>
             </div>
             <div className="auth-box">
-                <Card variant="outlined" sx={{ minWidth: 300, height: "129.9%" }}>
+                <Card variant="outlined" sx={{ minWidth: 300, height: "129.9%" }} elevation={5}>
                     <CardContent>
                         <Typography sx={{ fontSize: 28 }} color="text.primary" gutterBottom>
                             Welcome to Job Notifier! 👋🏻
