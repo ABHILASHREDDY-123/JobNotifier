@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from "./loader";
 import { useNavigate } from "react-router-dom";
+const API_URL="13.201.39.54:8000/";
+
 
 const SignIn = ({setToken,setUser}) => {
     const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ const SignIn = ({setToken,setUser}) => {
             const result = await signInWithPopup(auth, provider)
             const token = result.user.accessToken;
             const user = result.user;
-            const res = await axios.get("http://localhost:8000/auth", {
+            const res = await axios.get(API_URL+"auth", {
                 headers: {
                     'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/json'

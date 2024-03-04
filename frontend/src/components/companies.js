@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import {toast} from "react-toastify";
 
-const API_URL = "http://localhost:8000/";
+const API_URL = "13.201.39.54:8000/";
 
 const Company = ({ company, url, available, handleRemove, _id }) => {
     return (
