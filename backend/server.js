@@ -4,7 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-dotenv.require();
+dotenv.config();
 
 const DB_URL = process.env.MONGODB_URL
 
