@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import BuildIcon from '@mui/icons-material/Build';
-import  Button  from '@mui/material/Button';
-const Navbar = ({ token,setToken }) => {
+import Button from '@mui/material/Button';
+const Navbar = ({ token, setToken }) => {
 
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.removeItem("job-notifier");
     setToken("");
     navigate("/login");
   };
@@ -40,51 +41,51 @@ const Navbar = ({ token,setToken }) => {
                   color: 'inherit',
                   textDecoration: 'none',
                 }}
-                onClick={()=>navigate("/")}
+                onClick={() => navigate("/")}
               >
                 Job Notifier
               </Typography>
             </div>
-            <div style={{display:"flex",justifyContent:"space-evenly"}}>
+            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
               {token && token.length > 0 ? (
                 <>
                   <Typography variant="h6" component="div" sx={{
-                   display: { xs: 'none', md: 'flex' },
-                   mr: 2,
-                   fontFamily: 'monospace',
-                   fontWeight: 700,
-                   color: 'inherit',
-                   textDecoration: 'none',
-                   cursor: "pointer",
-                  }} onClick={()=>navigate("/companies")}>
-                  Companies
-                </Typography>
-                 <Typography variant="h6" component="div" sx={{
-                   display: { xs: 'none', md: 'flex' },
-                   mr: 2,
-                   fontFamily: 'monospace',
-                   fontWeight: 700,
-                   color: 'inherit',
-                   textDecoration: 'none',
-                   cursor: "pointer",
-                  }} onClick={()=>navigate("/test")}>
-                  Test
-                </Typography>
+                    display: { xs: 'none', md: 'flex' },
+                    mr: 2,
+                    fontFamily: 'monospace',
+                    fontWeight: 700,
+                    color: 'inherit',
+                    textDecoration: 'none',
+                    cursor: "pointer",
+                  }} onClick={() => navigate("/companies")}>
+                    Companies
+                  </Typography>
+                  <Typography variant="h6" component="div" sx={{
+                    display: { xs: 'none', md: 'flex' },
+                    mr: 2,
+                    fontFamily: 'monospace',
+                    fontWeight: 700,
+                    color: 'inherit',
+                    textDecoration: 'none',
+                    cursor: "pointer",
+                  }} onClick={() => navigate("/test")}>
+                    Test
+                  </Typography>
 
-                <Typography variant="h6" component="div" sx={{
-                  display: { xs: 'none', md: 'flex' },
-                  mr: 2,
-                  ml:2,
-                  marginTop:"4px",
-                  fontFamily: 'monospace',
-                  fontWeight: 700,
-                  color: 'inherit',
-                  textDecoration: 'none',
-                  cursor: "pointer"
-                }} onClick={handleLogout}>
-                  <LogoutIcon />
-                </Typography>
-                  </>
+                  <Typography variant="h6" component="div" sx={{
+                    display: { xs: 'none', md: 'flex' },
+                    mr: 2,
+                    ml: 2,
+                    marginTop: "4px",
+                    fontFamily: 'monospace',
+                    fontWeight: 700,
+                    color: 'inherit',
+                    textDecoration: 'none',
+                    cursor: "pointer"
+                  }} onClick={handleLogout}>
+                    <LogoutIcon />
+                  </Typography>
+                </>
               ) : (
                 <Typography variant="h6" component="a" sx={{
                   display: { xs: 'none', md: 'flex' },

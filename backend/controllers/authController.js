@@ -1,14 +1,15 @@
 const admin = require("../firebase/config");
 const jwt = require("jsonwebtoken");
 const Users = require("../schemas/userSchema");
-const JWT_KEY = "ABHILASH123";
+const dotenv = require('dotenv')
+dotenv.config();
+const JWT_KEY = process.env.JWT_KEY;
 
 
 const authController = async (req, res) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = await admin.auth().verifyIdToken(token);
-        console.log(decodedToken);
         const users = await Users.find({gmail:decodedToken.email});
         let newUser;
         if(users.length === 0){

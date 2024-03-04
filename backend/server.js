@@ -17,6 +17,8 @@ const testController = require("./controllers/testController");
 const signInChecker = require("./middlewares/auth");
 const addController = require("./controllers/addController");
 const companyController = require("./controllers/companyController");
+const deleteController = require("./controllers/deleteController");
+const mailController = require("./controllers/mailController");
 
 
 const app = express();
@@ -31,9 +33,12 @@ app.use("/auth", authController);
 app.use("/test",signInChecker,testController);
 app.use("/add",signInChecker,addController);
 app.use("/companies",signInChecker,companyController);
-
+app.use("/delete/:_id",signInChecker,deleteController);
 
 
 app.listen(8000,()=>{
+    setInterval(()=>{
+        mailController();
+    },1000*60*60*24)
     console.log("Server is running...");
 })

@@ -23,7 +23,7 @@ const Main = ()=>{
           <Route exact path='/' element={<App />}></Route>
           <Route path='/login' element={<SignIn setToken={setToken} setUser={setUser} />}/>
           <Route path='/test' element={<Test token={token}/>}></Route>
-          <Route path="/companies" element={<Companies user={user} token={token}/>}></Route>
+          <Route path="/companies" element={<Companies user={user} token={token} setToken={setToken}/>}></Route>
        </Routes>
     </Router>
   </>

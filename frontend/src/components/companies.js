@@ -6,11 +6,12 @@ import axios from "axios";
 import "../styles/companies.css";
 import Loader from "./loader";
 import Button from '@mui/material/Button';
-
+import { useNavigate } from "react-router-dom";
+import {toast} from "react-toastify";
 
 const API_URL = "http://localhost:8000/";
 
-const Company = ({ company, url, available, handleRemove, idx }) => {
+const Company = ({ company, url, available, handleRemove, _id }) => {
     return (
         <div className="company">
             <Card elevation={7} className="card-company">
@@ -34,7 +35,7 @@ const Company = ({ company, url, available, handleRemove, idx }) => {
                     </div>
                 </CardContent>
                 <CardActions>
-                    <Button variant='contained' color='error' className='company-bnt' onClick={() => handleRemove(idx)}> Remove </Button>
+                    <Button variant='contained' color='error' className='company-bnt' onClick={() => handleRemove(_id)}> Remove </Button>
                 </CardActions>
 
             </Card>
@@ -43,36 +44,57 @@ const Company = ({ company, url, available, handleRemove, idx }) => {
 }
 
 
-const Companies = ({ token }) => {
+const Companies = ({ token, setToken }) => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const handleRemove = (idx) => {
-        let newJobs = []
-        for (let i = 0; i < jobs.length; i++) {
-            if (i === idx) { }
-            else { newJobs.push(jobs[i]) }
+    const handleRemove = async (_id) => {
+        try {
+            const resp = await axios.delete(API_URL+`delete/${_id}`,{
+                headers:{
+                    Authorization:"Bearer "+token,
+                    "Content-Type":"application/json"
+                }
+            });
+            let newJobs = []
+            for (let i = 0; i < jobs.length; i++) {
+                if (jobs[i]._id === _id) { }
+                else { newJobs.push(jobs[i]) }
+            }
+            setJobs(newJobs);
+            toast.success("Removed successfully");
         }
-        setJobs(newJobs);
+        catch (err) {
+            toast.error(err.message);
+        }
     }
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const res = await axios.get(API_URL + "companies", {
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                    'Content-Type': 'Application/json'
+            try {
+                const res = await axios.get(API_URL + "companies", {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                        'Content-Type': 'Application/json'
+                    }
+                });
+                const data = res.data;
+                let arr = [];
+                for (let i = 0; i < data.jobs.length; i++) {
+                    arr.push({ ...data.jobs[i], available: data.results[i] })
                 }
-            });
-            const data = res.data;
-            let arr = [];
-            for (let i = 0; i < data.jobs.length; i++) {
-                arr.push({ ...data.jobs[i], available: data.results[i] })
+                console.log(arr);
+                setJobs(arr);
+                setLoading(false);
+
             }
-            console.log(arr);
-            setJobs(arr);
-            setLoading(false);
+            catch (err) {
+                localStorage.removeItem("job-notifier");
+                setToken("");
+                navigate("/login");
+            }
         }
         fetchData();
     }, [])
@@ -82,10 +104,9 @@ const Companies = ({ token }) => {
     }
     return (
         <div className="companies">
-            {jobs.map((e, idx) => {
-                console.log(e);
+            {jobs.map((e) => {
                 return (
-                    <Company handleRemove={handleRemove} company={e.company} url={e.url} available={e.available} idx={idx} />
+                    <Company handleRemove={handleRemove} company={e.company} url={e.url} available={e.available} _id={e._id} />
                 )
             })}
         </div>

@@ -30,7 +30,7 @@ function DisplayJsonData({ jsonData }) {
     );
 }
 
-const Test = ({token}) => {
+const Test = ({ token }) => {
     // const token = "";
     const [property, setProperty] = useState("");
     const [properties, setProperties] = useState([]);
@@ -38,6 +38,8 @@ const Test = ({token}) => {
     const [url, setURL] = useState("");
     const [resp, setResp] = useState("");
     const [company, setCompany] = useState("");
+    const [api, setApi] = useState(true);
+    const [query, setQuery] = useState("");
 
     const handleProperty = (e) => {
         setProperty(e.target.value);
@@ -49,16 +51,37 @@ const Test = ({token}) => {
         setProperty("");
     }
     const handleRemove = () => {
-        setProperty(properties[properties.length - 1])
-        let x = properties
-        x.pop()
-        setProperties(x);
-        setType("Object");
+        if (properties.length > 0) {
+            setProperty(properties[properties.length - 1])
+            let x = properties
+            x.pop()
+            setProperties(x);
+            setType("Object");
+        }
+    }
+
+    const handleQuery = async () => {
+        const resp = await axios.post(API_URL+"test",{
+            test:"page",
+            url,
+            query
+        },{headers:{
+            Authorization:"Bearer "+token,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+            'Content-Type':'application/json'
+        }});
+      const htmlContent = resp.data;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlContent, 'text/html');
+      console.log(doc);
+      const selectedDivs = doc.querySelectorAll(query);
+      console.log(selectedDivs);
+        
     }
 
     const handleAdd = async () => {
         try {
-            const res = await axios.post(API_URL + "add", { company,properties, url },
+            const res = await axios.post(API_URL + "add", { company, properties, url },
                 {
                     headers: {
                         Authorization: "Bearer " + token,
@@ -75,7 +98,7 @@ const Test = ({token}) => {
     const handleTest = async () => {
         try {
             const resp = await axios.post(API_URL + "test",
-                {
+                {   test:"api",
                     url
                 }
                 , {
@@ -103,22 +126,39 @@ const Test = ({token}) => {
         <div className='test'>
             <Card className='card-test' elevation={5}>
                 <CardContent>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <TextField
+                            className='company-name'
+                            id="outlined-basic"
+                            label="Company Name"
+                            variant="outlined"
+                            color="primary"
+                            style={{ width: "60%", marginBottom: "1.5rem" }}
+                            maxRows={1}
+                            onChange={(e) => {
+                                setCompany(e.target.value);
+                            }}
+                            value={company}
+                        />
+                        <FormControl style={{ display: "flow" }}>
+                            <Select
+                                labelId={`demo-simple-select-label`}
+                                id="demo-simple-select"
+                                label="Result Type"
+                                style={{ width: "140px", marginRight: "2rem" }}
+                                onChange={() => { setApi(!api) }}
+                                value={api ? "Api" : "Page"}
+                            >
+                                <MenuItem value={"Api"}>Api</MenuItem>
+                                <MenuItem value={"Page"}>Page</MenuItem>
+                            </Select>
+                            <InputLabel id={`demo-simple-select-label`}>Result Type</InputLabel>
+                        </FormControl>
+                        <br />
+                    </div>
                     <TextField
-                        className='company-name'
                         id="outlined-basic"
-                        label="Company Name"
-                        variant="outlined"
-                        color="primary"
-                        style={{ width: "84%", marginBottom: "1.5rem" }}
-                        maxRows={1}
-                        onChange={(e) => {
-                            setCompany(e.target.value);
-                        }}
-                        value={company}
-                    />
-                    <TextField
-                        id="outlined-basic"
-                        label="Api url"
+                        label={api ? "Api url" : "Page url"}
                         variant="outlined"
                         color="primary"
                         style={{ width: "84%" }}
@@ -131,8 +171,7 @@ const Test = ({token}) => {
                     />
                 </CardContent>
                 <CardActions>
-                    <div className='card-action'>
-
+                    {api ? <div className='card-action'>
                         {properties.map((e, i) => {
                             return (
                                 <FormControl fullWidth style={{ display: "flow" }}>
@@ -162,7 +201,7 @@ const Test = ({token}) => {
                                     label="Result Type"
                                     value={type}
                                     defaultValue={"Object"}
-                                    style={{ width: "140px", marginRight: "2rem" }}
+                                    style={{ width: "140px", marginRight: "2rem", marginLeft: "0.8rem" }}
                                     onChange={(e) => { setType(e.target.value) }}
                                 >
                                     <MenuItem value={"Object"}>Object</MenuItem>
@@ -178,7 +217,25 @@ const Test = ({token}) => {
                             <Button variant='contained' className='select-params' onClick={handleTest}> Test </Button>
                             <Button variant='contained' className='add-params' style={{ marginLeft: "30rem" }} onClick={handleAdd}> Add </Button>
                         </FormControl>
-                    </div>
+                    </div> : <div>
+                        <TextField
+                            id="outlined-basic"
+                            label="queryPath"
+                            variant="outlined"
+                            color="primary"
+                            style={{ width: "84%" }}
+                            maxRows={1}
+                            onChange={(e) => {
+                                setQuery(e.target.value);
+                            }}
+                            style={{ marginBottom: "1rem", marginLeft: "0.5rem" }}
+                            value={query}
+                        />
+                        <FormControl fullWidth style={{ display: "flow" }}>
+                            <Button variant='contained' className='select-params' onClick={handleQuery}> Test </Button>
+                            <Button variant='contained' className='add-params' style={{ marginLeft: "30rem" }} onClick={handleAdd}> Add </Button>
+                        </FormControl>
+                    </div>}
                 </CardActions>
             </Card>
             <Card className='resp-card' elevation={5}>
