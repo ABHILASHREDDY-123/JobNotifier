@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from "./loader";
 import { useNavigate } from "react-router-dom";
-const API_URL="13.201.39.54:8000/";
+const API_URL="http://13.201.39.54:8000/";
 
 
 const SignIn = ({setToken,setUser}) => {

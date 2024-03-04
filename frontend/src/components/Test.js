@@ -11,7 +11,7 @@ import { FormControl, InputLabel, Paper } from '@mui/material';
 import Button from '@mui/material/Button';
 import { toast } from "react-toastify";
 
-const API_URL = "13.201.39.54:8000/";
+const API_URL = "http://13.201.39.54:8000/";
 
 function DisplayJsonData({ jsonData }) {
     return (
