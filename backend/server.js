@@ -3,8 +3,10 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.require();
 
-const DB_URL = "mongodb://localhost:27017/jobNotifier"
+const DB_URL = process.env.MONGODB_URL
 
 mongoose.connect(DB_URL).then(()=>{
     console.log("Database connected")
