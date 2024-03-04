@@ -9,6 +9,7 @@ const DB_URL = "mongodb://localhost:27017/jobNotifier"
 mongoose.connect(DB_URL).then(()=>{
     console.log("Database connected")
 }).catch((err)=>{
+    console.log(err);
     console.log("Error in Database Connection")
 })
 
